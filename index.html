@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Surprise</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    overflow:hidden;
+    background:linear-gradient(135deg,#ff9a9e,#fad0c4,#ffdde1);
+    text-align:center;
+}
+
+/* Sections */
+.section{
+    display:none;
+    height:100vh;
+    padding-top:80px;
+}
+.active{
+    display:block;
+}
+
+/* Buttons */
+button{
+    padding:12px 25px;
+    font-size:20px;
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+    margin:10px;
+    transition:0.3s;
+}
+
+#yesBtn{
+    background:#ff3366;
+    color:white;
+}
+
+/* Moving Area */
+#moveArea{
+    position:relative;
+    width:100%;
+    height:50vh;
+}
+
+/* No Container */
+#noContainer{
+    position:absolute;
+    text-align:center;
+}
+
+/* No Button */
+#noBtn{
+    background:black;
+    color:white;
+}
+
+/* Dynamic Message */
+#dynamicMsg{
+    margin-top:5px;
+    font-weight:bold;
+    color:#cc0052;
+    white-space:nowrap;
+}
+
+/* Cartoon Display */
+#cartoonArea{
+    font-size:90px;
+    margin-bottom:10px;
+    transition:0.4s;
+}
+
+/* Heart Rain */
+.heart{
+    position:absolute;
+    top:-10px;
+    font-size:20px;
+    animation:fall linear forwards;
+}
+@keyframes fall{
+    to{transform:translateY(100vh);opacity:0;}
+}
+
+/* Confetti */
+.confetti{
+    position:absolute;
+    width:10px;
+    height:10px;
+    animation:confettiFall 3s linear forwards;
+}
+@keyframes confettiFall{
+    to{transform:translateY(100vh) rotate(360deg);opacity:0;}
+}
+</style>
+
+<script>
+
+/* Switch Pages */
+function goToLove(){
+    document.getElementById("indexPage").classList.remove("active");
+    document.getElementById("lovePage").classList.add("active");
+}
+
+/* Messages */
+let messages=[
+"🥺 arey pagal ye option nhi...",
+"😢 Fr se?...",
+"💖 Please Socho Na ek baar...",
+"😭 Itna Bhi Kya Gussa...",
+"😘 Ek Baar Aur Soch Lo...",
+"😘 Ab jabardasti hoga.."
+];
+
+/* Cartoon Pictures */
+let cartoons=[
+"🥺💔",
+"😭🌧️",
+"🥰💘",
+"😢👉👈",
+"🥰💘",
+"😘❤️"
+];
+
+let count=0;
+let yesSize=20;
+
+function noClicked(){
+
+    let container=document.getElementById("noContainer");
+    let msg=document.getElementById("dynamicMsg");
+    let yesBtn=document.getElementById("yesBtn");
+    let cartoon=document.getElementById("cartoonArea");
+
+    if(count < messages.length){
+
+        /* Random position */
+        let area=document.getElementById("moveArea");
+        let maxX=area.clientWidth-150;
+        let maxY=area.clientHeight-100;
+
+        let x=Math.random()*maxX;
+        let y=Math.random()*maxY;
+
+        container.style.left=x+"px";
+        container.style.top=y+"px";
+
+        msg.innerHTML=messages[count];
+
+        /* Change Cartoon */
+        cartoon.innerHTML=cartoons[count];
+
+        yesSize+=5;
+        yesBtn.style.fontSize=yesSize+"px";
+
+        count++;
+    }else{
+        container.style.display="none";
+    }
+}
+
+function showFinal(){
+    document.getElementById("lovePage").classList.remove("active");
+    document.getElementById("finalPage").classList.add("active");
+    createConfetti();
+}
+
+/* Heart Rain */
+function createHeart(){
+    let heart=document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML="💖";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.animationDuration=(Math.random()*2+3)+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>{heart.remove();},5000);
+}
+setInterval(createHeart,300);
+
+/* Confetti */
+function createConfetti(){
+    for(let i=0;i<80;i++){
+        let conf=document.createElement("div");
+        conf.classList.add("confetti");
+        conf.style.left=Math.random()*100+"vw";
+        conf.style.top="-10px";
+        conf.style.background="hsl("+Math.random()*360+",100%,50%)";
+        document.body.appendChild(conf);
+        setTimeout(()=>{conf.remove();},3000);
+    }
+}
+</script>
+
+</head>
+
+<body>
+
+<!-- INDEX -->
+<div id="indexPage" class="section active">
+    <h1>💌 Pushp Wants To Ask You Something</h1>
+    <div style="font-size:90px;">💖✨</div>
+    <br>
+    <button onclick="goToLove()">Open Message ❤️</button>
+</div>
+
+<!-- LOVE PAGE -->
+<div id="lovePage" class="section">
+
+    <div id="cartoonArea">🥰💘</div>
+
+    <h1>Do You Love Me? 💖</h1>
+
+    <button id="yesBtn" onclick="showFinal()">Yes ❤️</button>
+
+    <div id="moveArea">
+        <div id="noContainer" style="left:45%; top:20%;">
+            <button id="noBtn" onclick="noClicked()">No 😜</button>
+            <div id="dynamicMsg"></div>
+        </div>
+    </div>
+
+</div>
+
+<!-- FINAL -->
+<div id="finalPage" class="section">
+    <div style="font-size:100px;">💖😍🎉</div>
+    <h1>I Love You Too ❤️</h1>
+    <h2>Mujhe pta tha... Tere dil me bhi pyar hai 🥰</h2>
+</div>
+
+</body>
+</html>
